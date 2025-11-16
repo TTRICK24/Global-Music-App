@@ -1,0 +1,154 @@
+import { useState, useEffect } from 'react';
+import { getTopTracksByCountry } from '../api/lastfm';
+import { useNavigate } from 'react-router-dom';
+
+function GlobalMix() {
+    const [songs, setSongs] = useState([]);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(null);
+    const navigate = useNavigate();
+
+    const countries = [
+        { name: 'united states', flag: '🇺🇸' },
+        { name: 'united kingdom', flag: '🇬🇧' },
+        { name: 'spain', flag: '🇪🇸' },
+        { name: 'france', flag: '🇫🇷' },
+        { name: 'germany', flag: '🇩🇪' },
+        { name: 'japan', flag: '🇯🇵' },
+        { name: 'korea', flag: '🇰🇷' },
+        { name: 'brazil', flag: '🇧🇷' },
+        { name: 'canada', flag: '🇨🇦' },
+        { name: 'australia', flag: '🇦🇺' },
+    ];
+
+    const generateGlobalMix = async () => {
+        setLoading(true);
+        setError(null);
+
+        try {
+            // Shuffle countries and pick 10
+            const shuffled = [...countries].sort(() => Math.random() - 0.5);
+            const selectedCountries = shuffled.slice(0, 10);
+
+            console.log('Selected countries:', selectedCountries);
+
+            // Get 2 songs from each country
+            const allPromises = selectedCountries.map(country =>
+                getTopTracksByCountry(country.name, 2)
+            );
+
+            const results = await Promise.all(allPromises);
+            console.log('API results:', results);
+            console.log('Number of results:', results.length);
+            console.log('Songs per result:', results.map(r => r.length));
+
+            // Combine all songs with country info
+            const mixedSongs = results.flatMap((tracks, index) =>
+                tracks.map(track => ({
+                    ...track,
+                    country: selectedCountries[index].name,
+                    flag: selectedCountries[index].flag
+                }))
+            );
+
+            console.log('Total mixed songs:', mixedSongs.length);
+
+            // Shuffle the final playlist
+            const shuffledPlaylist = mixedSongs.sort(() => Math.random() - 0.5);
+
+            setSongs(shuffledPlaylist);
+        } catch (err) {
+            setError(err.message);
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    useEffect(() => {
+        generateGlobalMix();
+    }, []);
+
+    if (loading) {
+        return (
+            <div className="flex justify-center items-center min-h-screen">
+                <div className="text-2xl">🌍 Generating your global mix...</div>
+            </div>
+        );
+    }
+
+    if (error) {
+        return (
+            <div className="flex justify-center items-center min-h-screen">
+                <div className="text-red-500 text-xl">Error: {error}</div>
+            </div>
+        );
+    }
+
+    return (
+        <div className="min-h-screen bg-gradient-to-br from-purple-900 via-blue-900 to-indigo-900 p-8">
+            <div className="max-w-7xl mx-auto">
+                <div className="flex items-center justify-between mb-8">
+                    <button
+                        onClick={() => navigate('/')}
+                        className="px-4 py-2 bg-white/10 hover:bg-white/20 rounded-lg transition-colors"
+                    >
+                        ← Back to Charts
+                    </button>
+
+                    <h1 className="text-4xl font-bold text-white text-center flex-1">
+                        🌍 Global Mix Playlist
+                    </h1>
+
+                    <button
+                        onClick={generateGlobalMix}
+                        className="px-6 py-2 bg-gradient-to-r from-pink-500 to-purple-500 hover:from-pink-600 hover:to-purple-600 rounded-lg font-semibold transition-all transform hover:scale-105"
+                    >
+                        🔄 Generate New Mix
+                    </button>
+                </div>
+
+                <p className="text-center text-white/80 mb-8 text-lg">
+                    20 songs from around the world to expand your music taste! 🎵
+                </p>
+
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                    {songs.map((song, index) => (
+                        <div
+                            key={index}
+                            className="bg-white/10 backdrop-blur-lg rounded-lg p-4 hover:bg-white/20 transition-all transform hover:scale-105"
+                        >
+                            <div className="flex items-center gap-2 mb-2">
+                                <span className="text-2xl">{song.flag}</span>
+                                <span className="text-white/60 text-sm capitalize">{song.country}</span>
+                            </div>
+
+                            <div className="aspect-square bg-gradient-to-br from-purple-500 to-pink-500 rounded-lg mb-3 flex items-center justify-center overflow-hidden">
+                                {song.image ? (
+                                    <img
+                                        src={song.image}
+                                        alt={song.name}
+                                        className="w-full h-full object-cover"
+                                    />
+                                ) : (
+                                    <span className="text-6xl">🎵</span>
+                                )}
+                            </div>
+
+                            <h3 className="font-bold text-white mb-1 truncate" title={song.name}>
+                                {song.name}
+                            </h3>
+                            <p className="text-white/70 text-sm truncate" title={song.artist}>
+                                {song.artist}
+                            </p>
+                            <p className="text-white/50 text-xs mt-2">
+                                {parseInt(song.playcount).toLocaleString()} plays
+                            </p>
+                        </div>
+                    ))}
+                </div>
+            </div>
+        </div>
+    );
+}
+
+export default GlobalMix;
