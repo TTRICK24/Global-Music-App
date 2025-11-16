@@ -1,13 +1,30 @@
 import { useState, useEffect } from 'react';
 import { getTopTracksByCountry } from '../api/lastfm';
-import { useNavigate } from 'react-router-dom';
 
 function Home() {
     const [songs, setSongs] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
     const [country, setCountry] = useState('united states');
-    const navigate = useNavigate();
+
+    // Global Mix state
+    const [globalMixSongs, setGlobalMixSongs] = useState([]);
+    const [globalMixLoading, setGlobalMixLoading] = useState(false);
+    const [showGlobalMix, setShowGlobalMix] = useState(false);
+
+    const countries = [
+        { name: 'united states', flag: '🇺🇸' },
+        { name: 'united kingdom', flag: '🇬🇧' },
+        { name: 'spain', flag: '🇪🇸' },
+        { name: 'france', flag: '🇫🇷' },
+        { name: 'germany', flag: '🇩🇪' },
+        { name: 'japan', flag: '🇯🇵' },
+        { name: 'brazil', flag: '🇧🇷' },
+        { name: 'canada', flag: '🇨🇦' },
+        { name: 'australia', flag: '🇦🇺' },
+        { name: 'mexico', flag: '🇲🇽' },
+        { name: 'italy', flag: '🇮🇹' },
+    ];
 
     useEffect(() => {
         async function fetchSongs() {
@@ -25,7 +42,48 @@ function Home() {
         }
 
         fetchSongs();
-    }, [country]); // Re-fetch when country changes
+    }, [country]);
+
+    const generateGlobalMix = async () => {
+        setGlobalMixLoading(true);
+        setShowGlobalMix(true);
+
+        try {
+            const uniqueSongs = [];
+            const seenSongs = new Set();
+            let attempts = 0;
+            const maxAttempts = 30;
+
+            while (uniqueSongs.length < 20 && attempts < maxAttempts) {
+                const shuffled = [...countries].sort(() => Math.random() - 0.5);
+                const randomCountry = shuffled[0];
+
+                const tracks = await getTopTracksByCountry(randomCountry.name, 3);
+
+                for (const track of tracks) {
+                    const songKey = `${track.name.toLowerCase()}-${track.artist.toLowerCase()}`;
+
+                    if (!seenSongs.has(songKey) && uniqueSongs.length < 20) {
+                        seenSongs.add(songKey);
+                        uniqueSongs.push({
+                            ...track,
+                            country: randomCountry.name,
+                            flag: randomCountry.flag
+                        });
+                    }
+                }
+
+                attempts++;
+            }
+
+            const shuffledPlaylist = uniqueSongs.sort(() => Math.random() - 0.5);
+            setGlobalMixSongs(shuffledPlaylist);
+        } catch (err) {
+            console.error('Error generating global mix:', err);
+        } finally {
+            setGlobalMixLoading(false);
+        }
+    };
 
     if (loading) {
         return (
@@ -48,16 +106,6 @@ function Home() {
             <h1 className="text-4xl font-bold mb-4 text-center">
                 � Global Music Trends - Top Tracks
             </h1>
-
-            {/* Action Buttons */}
-            <div className="max-w-md mx-auto mb-6 flex gap-4">
-                <button
-                    onClick={() => navigate('/global-mix')}
-                    className="flex-1 px-6 py-3 bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 rounded-lg font-semibold transition-all transform hover:scale-105 shadow-lg"
-                >
-                    🌍 Create Global Mix
-                </button>
-            </div>
 
             {/* Country Selector */}
             <div className="max-w-md mx-auto mb-8">
@@ -119,6 +167,71 @@ function Home() {
                     </div>
                 ))}
             </div>
+
+            {/* Generate Global Mix Button */}
+            <div className="max-w-6xl mx-auto mt-12 mb-8">
+                <button
+                    onClick={generateGlobalMix}
+                    disabled={globalMixLoading}
+                    className="w-full px-6 py-4 bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 rounded-lg font-semibold text-xl transition-all transform hover:scale-105 shadow-lg disabled:opacity-50 disabled:cursor-not-allowed"
+                >
+                    {globalMixLoading ? '🌍 Generating Your Global Mix...' : '🌍 Generate Global Mix Playlist'}
+                </button>
+            </div>
+
+            {/* Global Mix Section */}
+            {showGlobalMix && (
+                <div className="mt-16 bg-gradient-to-br from-purple-900 via-blue-900 to-indigo-900 p-8 rounded-xl">
+                    <h2 className="text-4xl font-bold text-white text-center mb-4">
+                        🌍 Global Mix Playlist
+                    </h2>
+                    <p className="text-center text-white/80 mb-8 text-lg">
+                        20 songs from around the world to expand your music taste! 🎵
+                    </p>
+
+                    {globalMixLoading ? (
+                        <div className="text-center text-white/80">Loading your global mix...</div>
+                    ) : (
+                        <div className="flex justify-center w-full px-4">
+                            <div className="w-[800px] space-y-3">
+                                {globalMixSongs.map((song, index) => (
+                                    <div
+                                        key={index}
+                                        className="bg-white/10 backdrop-blur-lg rounded-lg p-4 hover:bg-white/20 transition-all"
+                                    >
+                                        <div className="flex items-center justify-between">
+                                            {/* Left side: Index + Song Info */}
+                                            <div className="flex items-center gap-6">
+                                                {/* Index Number */}
+                                                <div className="text-3xl font-bold text-white/80 w-12 flex-shrink-0 text-center">
+                                                    {index + 1}
+                                                </div>
+
+                                                {/* Song Info */}
+                                                <div className="flex-shrink-0">
+                                                    <h3 className="font-bold text-white text-lg mb-1" title={song.name}>
+                                                        {song.name}
+                                                    </h3>
+                                                    <p className="text-white/70 text-sm" title={song.artist}>
+                                                        {song.artist}
+                                                    </p>
+                                                </div>
+                                            </div>
+
+                                            {/* Right side: Country Badge */}
+                                            <div className="flex-shrink-0 ml-4">
+                                                <span className="text-white/60 text-xs capitalize bg-white/10 px-3 py-1 rounded-full whitespace-nowrap">
+                                                    {song.country}
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                ))}
+                            </div>
+                        </div>
+                    )}
+                </div>
+            )}
         </div>
     );
 }
