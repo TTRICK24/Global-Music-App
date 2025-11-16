@@ -1,0 +1,368 @@
+:root {
+  --bg: #020617;
+  --accent: #38bdf8;
+  --accent-soft: rgba(56, 189, 248, 0.15);
+  --text-main: #e5e7eb;
+  --text-muted: #9ca3af;
+  --border-subtle: #1f2937;
+  --radius-lg: 18px;
+  --radius-pill: 999px;
+  --shadow-soft: 0 22px 40px rgba(15, 23, 42, 0.85);
+  --font: system-ui, -apple-system, BlinkMacSystemFont, "SF Pro Text",
+    "Segoe UI", sans-serif;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  background: radial-gradient(circle at top, #1e293b 0, #020617 60%, #000 100%);
+  color: var(--text-main);
+  font-family: var(--font);
+}
+
+.app {
+  min-height: 100vh;
+  max-width: 1120px;
+  margin: 0 auto;
+  padding: 24px 20px 20px;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Header */
+
+.app-header {
+  margin-bottom: 22px;
+}
+
+.app-header h1 {
+  margin: 0 0 8px;
+  font-size: 2.1rem;
+  letter-spacing: 0.04em;
+}
+
+.app-header p {
+  margin: 0;
+  max-width: 520px;
+  color: var(--text-muted);
+}
+
+/* Cards */
+
+.card {
+  background: rgba(15, 23, 42, 0.96);
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--border-subtle);
+  box-shadow: var(--shadow-soft);
+  padding: 16px 18px 18px;
+}
+
+/* Landing (countries list) */
+
+.landing-main {
+  flex: 1;
+  display: flex;
+  align-items: stretch;
+}
+
+.landing-card {
+  width: 100%;
+}
+
+.landing-card h2 {
+  margin: 0 0 6px;
+  font-size: 1.1rem;
+}
+
+.card-caption {
+  margin: 0 0 14px;
+  font-size: 0.86rem;
+  color: var(--text-muted);
+}
+
+.country-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+  gap: 12px;
+}
+
+.country-tile {
+  border-radius: 14px;
+  border: 1px solid rgba(148, 163, 184, 0.4);
+  background: radial-gradient(circle at top left, #0f172a 0, #020617 70%);
+  padding: 12px 12px 10px;
+  text-align: left;
+  cursor: pointer;
+  color: var(--text-main);
+  font-size: 0.92rem;
+  transition: transform 150ms ease-out, box-shadow 150ms ease-out,
+    border-color 150ms ease-out, background 150ms ease-out;
+}
+
+.country-tile:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 16px 30px rgba(15, 23, 42, 0.9);
+  border-color: var(--accent);
+  background: radial-gradient(circle at top left, #1e293b 0, #020617 70%);
+}
+
+.country-tile-name {
+  display: block;
+  font-weight: 500;
+  margin-bottom: 4px;
+}
+
+.country-tile-sub {
+  display: block;
+  font-size: 0.78rem;
+  color: var(--text-muted);
+}
+
+/* Country detail page */
+
+.country-main {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+/* Back button */
+
+.top-bar {
+  margin-bottom: 2px;
+}
+
+.back-btn {
+  border-radius: var(--radius-pill);
+  border: 1px solid rgba(148, 163, 184, 0.5);
+  background: rgba(15, 23, 42, 0.95);
+  color: var(--text-main);
+  font-size: 0.82rem;
+  padding: 6px 12px;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  transition: background 120ms ease-out, transform 120ms ease-out,
+    box-shadow 120ms ease-out, border-color 120ms ease-out;
+}
+
+.back-btn:hover {
+  background: rgba(17, 24, 39, 1);
+  border-color: var(--accent);
+  box-shadow: 0 8px 18px rgba(15, 23, 42, 0.9);
+  transform: translateY(-1px);
+}
+
+/* Header card (inside country page) */
+
+.header-card {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 12px;
+  align-items: flex-start;
+}
+
+.header-card-main h2 {
+  margin: 0 0 4px;
+  font-size: 1.1rem;
+}
+
+.header-card-main h2 span {
+  color: var(--accent);
+}
+
+.header-card-main p {
+  margin: 0;
+}
+
+/* Pills & search */
+
+.header-card-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  justify-content: flex-end;
+  align-items: center;
+}
+
+.pill {
+  border-radius: var(--radius-pill);
+  border: 1px solid rgba(148, 163, 184, 0.6);
+  padding: 6px 10px;
+  font-size: 0.78rem;
+  color: var(--text-muted);
+  background: rgba(15, 23, 42, 0.9);
+}
+
+.pill--accent {
+  border-color: var(--accent);
+  background: var(--accent-soft);
+  color: var(--text-main);
+}
+
+.pill-label {
+  opacity: 0.75;
+  margin-right: 4px;
+}
+
+.pill-value {
+  font-weight: 500;
+}
+
+.search-box {
+  background: #020617;
+  border-radius: var(--radius-pill);
+  padding: 4px 10px;
+  border: 1px solid rgba(148, 163, 184, 0.5);
+}
+
+.search-box input {
+  border: none;
+  outline: none;
+  background: transparent;
+  font-size: 0.82rem;
+  color: var(--text-main);
+  width: 170px;
+}
+
+.search-box input::placeholder {
+  color: rgba(148, 163, 184, 0.82);
+}
+
+/* Songs list */
+
+.songs-card {
+  padding-top: 12px;
+}
+
+.songs-header-row {
+  display: grid;
+  grid-template-columns: 40px 2.4fr 1.8fr 1.2fr;
+  gap: 10px;
+  font-size: 0.78rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: rgba(148, 163, 184, 0.9);
+  margin-bottom: 6px;
+}
+
+.songs-list {
+  max-height: 480px;
+  overflow-y: auto;
+  border-radius: 14px;
+  border: 1px solid rgba(30, 41, 59, 0.95);
+  background: radial-gradient(circle at top, #020617 0, #020617 65%);
+}
+
+.song-row {
+  display: grid;
+  grid-template-columns: 40px 2.4fr 1.8fr 1.2fr;
+  gap: 10px;
+  padding: 8px 10px;
+  align-items: center;
+  font-size: 0.9rem;
+  border-bottom: 1px solid rgba(30, 41, 59, 0.85);
+  transition: background 120ms ease-out;
+}
+
+.song-row:last-child {
+  border-bottom: none;
+}
+
+.song-row:hover {
+  background: rgba(15, 23, 42, 0.95);
+}
+
+.col-rank {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+  color: rgba(148, 163, 184, 0.96);
+}
+
+.col-title .song-title {
+  font-weight: 500;
+}
+
+.col-artist .song-artist {
+  color: var(--text-muted);
+  font-size: 0.85rem;
+}
+
+.col-genre {
+  font-size: 0.8rem;
+  color: rgba(148, 163, 184, 0.92);
+}
+
+.filter-info {
+  margin: 8px 2px 0;
+  font-size: 0.78rem;
+  color: var(--text-muted);
+}
+
+/* Empty state */
+
+.empty-state {
+  padding: 28px 14px;
+  text-align: center;
+}
+
+.empty-state h3 {
+  margin: 0 0 6px;
+}
+
+.empty-state p {
+  margin: 0;
+  color: var(--text-muted);
+}
+
+/* Footer */
+
+.app-footer {
+  margin-top: 18px;
+  font-size: 0.78rem;
+  color: var(--text-muted);
+}
+
+/* Responsive */
+
+@media (max-width: 768px) {
+  .app {
+    padding: 18px 14px 14px;
+  }
+
+  .songs-header-row,
+  .song-row {
+    grid-template-columns: 32px 2.3fr 1.8fr 1.2fr;
+  }
+
+  .search-box input {
+    width: 130px;
+  }
+}
+
+@media (max-width: 580px) {
+  .songs-header-row,
+  .song-row {
+    grid-template-columns: 30px 2.2fr 1.8fr;
+  }
+
+  .col-genre {
+    display: none;
+  }
+
+  .header-card {
+    flex-direction: column;
+  }
+
+  .header-card-meta {
+    justify-content: flex-start;
+  }
+}
