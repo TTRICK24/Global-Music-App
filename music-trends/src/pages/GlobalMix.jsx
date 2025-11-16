@@ -30,7 +30,7 @@ function GlobalMix() {
             const uniqueSongs = [];
             const seenSongs = new Set();
             let attempts = 0;
-            const maxAttempts = 15; // Prevent infinite loops
+            const maxAttempts = 30; // Increased to ensure we get 20 songs
 
             // Keep fetching until we have 20 unique songs
             while (uniqueSongs.length < 20 && attempts < maxAttempts) {
@@ -121,24 +121,43 @@ function GlobalMix() {
                     20 songs from around the world to expand your music taste! 🎵
                 </p>
 
-                <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-3">
-                    {songs.map((song, index) => (
-                        <div
-                            key={index}
-                            className="bg-white/10 backdrop-blur-lg rounded-lg p-3 hover:bg-white/20 transition-all"
-                        >
-                            <div className="mb-2">
-                                <span className="text-white/60 text-xs capitalize bg-white/10 px-2 py-1 rounded">{song.country}</span>
-                            </div>
+                {/* Centered container with controlled width */}
+                <div className="flex justify-center w-full px-4">
+                    <div className="w-[800px] space-y-3">
+                        {songs.map((song, index) => (
+                            <div
+                                key={index}
+                                className="bg-white/10 backdrop-blur-lg rounded-lg p-4 hover:bg-white/20 transition-all"
+                            >
+                                <div className="flex items-center justify-between">
+                                    {/* Left side: Index + Song Info */}
+                                    <div className="flex items-center gap-6">
+                                        {/* Index Number */}
+                                        <div className="text-3xl font-bold text-white/80 w-12 flex-shrink-0 text-center">
+                                            {index + 1}
+                                        </div>
 
-                            <h3 className="font-bold text-white text-sm mb-1 truncate" title={song.name}>
-                                {song.name}
-                            </h3>
-                            <p className="text-white/70 text-xs truncate" title={song.artist}>
-                                {song.artist}
-                            </p>
-                        </div>
-                    ))}
+                                        {/* Song Info */}
+                                        <div className="flex-shrink-0">
+                                            <h3 className="font-bold text-white text-lg mb-1" title={song.name}>
+                                                {song.name}
+                                            </h3>
+                                            <p className="text-white/70 text-sm" title={song.artist}>
+                                                {song.artist}
+                                            </p>
+                                        </div>
+                                    </div>
+
+                                    {/* Right side: Country Badge */}
+                                    <div className="flex-shrink-0 ml-4">
+                                        <span className="text-white/60 text-xs capitalize bg-white/10 px-3 py-1 rounded-full whitespace-nowrap">
+                                            {song.country}
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                        ))}
+                    </div>
                 </div>
             </div>
         </div>
