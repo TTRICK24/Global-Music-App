@@ -15,10 +15,11 @@ function GlobalMix() {
         { name: 'france', flag: '🇫🇷' },
         { name: 'germany', flag: '🇩🇪' },
         { name: 'japan', flag: '🇯🇵' },
-        { name: 'korea', flag: '🇰🇷' },
-        { name: 'brazil', flag: '🇧🇷' },
-        { name: 'canada', flag: '🇨🇦' },
+        { name: 'brazil', flag: '�🇷' },
+        { name: 'canada', flag: '��' },
         { name: 'australia', flag: '🇦🇺' },
+        { name: 'mexico', flag: '🇲🇽' },
+        { name: 'italy', flag: '��' },
     ];
 
     const generateGlobalMix = async () => {

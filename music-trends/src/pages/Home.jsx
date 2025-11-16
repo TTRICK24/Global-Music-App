@@ -76,7 +76,6 @@ function Home() {
                     <option value="france">🇫🇷 France</option>
                     <option value="germany">🇩🇪 Germany</option>
                     <option value="japan">🇯🇵 Japan</option>
-                    <option value="south korea">🇰🇷 South Korea</option>
                     <option value="brazil">🇧🇷 Brazil</option>
                     <option value="canada">🇨🇦 Canada</option>
                     <option value="australia">🇦🇺 Australia</option>
