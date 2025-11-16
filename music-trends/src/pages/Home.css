@@ -1,0 +1,87 @@
+/* Remove default browser margins/padding */
+body,
+html {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    background-color: black;
+}
+
+/* Sticky Header */
+.sticky-header {
+    position: -webkit-sticky;
+    /* Safari */
+    position: sticky;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 1000;
+    background: linear-gradient(to right, #06b6d4, #3b82f6);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.header-container {
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 1rem 1.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.header-left {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+.header-logo {
+    font-size: 1.875rem;
+}
+
+.header-title {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: white;
+    margin: 0;
+}
+
+.header-right {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+.header-label {
+    color: white;
+    font-weight: 500;
+}
+
+.header-select {
+    padding: 0.5rem 1rem;
+    background: white;
+    color: #1f2937;
+    border-radius: 0.5rem;
+    border: none;
+    outline: none;
+    cursor: pointer;
+}
+
+.header-select:focus {
+    outline: 2px solid rgba(255, 255, 255, 0.5);
+}
+
+/* Main Content */
+.main-content {
+    min-height: 100vh;
+    background-color: black;
+    color: white;
+    padding: 2.5rem;
+}
