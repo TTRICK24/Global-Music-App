@@ -20,7 +20,13 @@ export async function getTopTracksByCountry(country = 'united states', limit = 2
         });
 
         console.log('Last.fm API Response:', res.data);
-        return res.data.tracks?.track || [];
+
+        // Normalize the data to ensure artist is always a string
+        const tracks = res.data.tracks?.track || [];
+        return tracks.map(track => ({
+            ...track,
+            artist: typeof track.artist === 'object' ? track.artist.name : track.artist
+        }));
     } catch (error) {
         console.error('Error fetching Last.fm tracks:', error);
         throw error;
@@ -40,7 +46,13 @@ export async function getGlobalTopTracks(limit = 20) {
         });
 
         console.log('Global tracks response:', res.data);
-        return res.data.tracks?.track || [];
+
+        // Normalize the data to ensure artist is always a string
+        const tracks = res.data.tracks?.track || [];
+        return tracks.map(track => ({
+            ...track,
+            artist: typeof track.artist === 'object' ? track.artist.name : track.artist
+        }));
     } catch (error) {
         console.error('Error fetching global tracks:', error);
         throw error;
