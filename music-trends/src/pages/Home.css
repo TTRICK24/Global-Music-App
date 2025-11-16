@@ -17,7 +17,6 @@ body {
 /* Sticky Header */
 .sticky-header {
     position: -webkit-sticky;
-    /* Safari */
     position: sticky;
     top: 0;
     left: 0;
@@ -76,6 +75,40 @@ body {
 
 .header-select:focus {
     outline: 2px solid rgba(255, 255, 255, 0.5);
+}
+
+/* Banner Section */
+.charts-banner {
+    position: -webkit-sticky;
+    /* Safari */
+    position: sticky;
+    top: 73px;
+    /* Height of the header - adjust if needed */
+    z-index: 999;
+    /* Below header but above content */
+    background-color: #374151;
+    padding: 1.5rem 0;
+    text-align: center;
+}
+
+.banner-content {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 1rem;
+}
+
+.banner-text {
+    color: white;
+    font-size: 1.5rem;
+    font-weight: 600;
+}
+
+.banner-country {
+    color: white;
+    font-size: 1.5rem;
+    font-weight: 400;
+    text-transform: capitalize;
 }
 
 /* Main Content */
