@@ -108,7 +108,7 @@ function Home() {
             </h1>
 
             {/* Country Selector */}
-            <div className="max-w-md mx-auto mb-8">
+            <div className="w-[700px] mx-auto mb-8">
                 <label htmlFor="country" className="block text-sm font-medium mb-2">
                     Select Country:
                 </label>
@@ -135,7 +135,7 @@ function Home() {
                 </select>
             </div>
 
-            <div className="max-w-6xl mx-auto grid gap-4">
+            <div className="w-[700px] mx-auto grid gap-4">
                 {songs.slice(0, 50).map((song, index) => (
                     <div
                         key={song.mbid || index}
@@ -144,14 +144,6 @@ function Home() {
                         <div className="text-2xl font-bold text-gray-500 w-12">
                             #{index + 1}
                         </div>
-
-                        {song.image?.[2]?.['#text'] && (
-                            <img
-                                src={song.image[2]['#text']}
-                                alt={song.name}
-                                className="w-20 h-20 rounded-md object-cover"
-                            />
-                        )}
 
                         <div className="flex-1">
                             <h2 className="text-xl font-bold">
