@@ -27,35 +27,44 @@ function GlobalMix() {
         setError(null);
 
         try {
-            // Shuffle countries and pick 10
-            const shuffled = [...countries].sort(() => Math.random() - 0.5);
-            const selectedCountries = shuffled.slice(0, 10);
+            const uniqueSongs = [];
+            const seenSongs = new Set();
+            let attempts = 0;
+            const maxAttempts = 15; // Prevent infinite loops
 
-            console.log('Selected countries:', selectedCountries);
+            // Keep fetching until we have 20 unique songs
+            while (uniqueSongs.length < 20 && attempts < maxAttempts) {
+                // Shuffle countries and pick a random one
+                const shuffled = [...countries].sort(() => Math.random() - 0.5);
+                const randomCountry = shuffled[0];
 
-            // Get 2 songs from each country
-            const allPromises = selectedCountries.map(country =>
-                getTopTracksByCountry(country.name, 2)
-            );
+                console.log(`Attempt ${attempts + 1}: Fetching from ${randomCountry.name}`);
 
-            const results = await Promise.all(allPromises);
-            console.log('API results:', results);
-            console.log('Number of results:', results.length);
-            console.log('Songs per result:', results.map(r => r.length));
+                // Get 3 songs from this country
+                const tracks = await getTopTracksByCountry(randomCountry.name, 3);
 
-            // Combine all songs with country info
-            const mixedSongs = results.flatMap((tracks, index) =>
-                tracks.map(track => ({
-                    ...track,
-                    country: selectedCountries[index].name,
-                    flag: selectedCountries[index].flag
-                }))
-            );
+                // Add unique songs
+                for (const track of tracks) {
+                    const songKey = `${track.name.toLowerCase()}-${track.artist.toLowerCase()}`;
 
-            console.log('Total mixed songs:', mixedSongs.length);
+                    if (!seenSongs.has(songKey) && uniqueSongs.length < 20) {
+                        seenSongs.add(songKey);
+                        uniqueSongs.push({
+                            ...track,
+                            country: randomCountry.name,
+                            flag: randomCountry.flag
+                        });
+                    }
+                }
+
+                attempts++;
+                console.log(`Current unique songs: ${uniqueSongs.length}`);
+            }
+
+            console.log('Final unique songs:', uniqueSongs.length);
 
             // Shuffle the final playlist
-            const shuffledPlaylist = mixedSongs.sort(() => Math.random() - 0.5);
+            const shuffledPlaylist = uniqueSongs.sort(() => Math.random() - 0.5);
 
             setSongs(shuffledPlaylist);
         } catch (err) {
@@ -112,37 +121,21 @@ function GlobalMix() {
                     20 songs from around the world to expand your music taste! 🎵
                 </p>
 
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-3">
                     {songs.map((song, index) => (
                         <div
                             key={index}
-                            className="bg-white/10 backdrop-blur-lg rounded-lg p-4 hover:bg-white/20 transition-all transform hover:scale-105"
+                            className="bg-white/10 backdrop-blur-lg rounded-lg p-3 hover:bg-white/20 transition-all"
                         >
-                            <div className="flex items-center gap-2 mb-2">
-                                <span className="text-2xl">{song.flag}</span>
-                                <span className="text-white/60 text-sm capitalize">{song.country}</span>
+                            <div className="mb-2">
+                                <span className="text-white/60 text-xs capitalize bg-white/10 px-2 py-1 rounded">{song.country}</span>
                             </div>
 
-                            <div className="aspect-square bg-gradient-to-br from-purple-500 to-pink-500 rounded-lg mb-3 flex items-center justify-center overflow-hidden">
-                                {song.image ? (
-                                    <img
-                                        src={song.image}
-                                        alt={song.name}
-                                        className="w-full h-full object-cover"
-                                    />
-                                ) : (
-                                    <span className="text-6xl">🎵</span>
-                                )}
-                            </div>
-
-                            <h3 className="font-bold text-white mb-1 truncate" title={song.name}>
+                            <h3 className="font-bold text-white text-sm mb-1 truncate" title={song.name}>
                                 {song.name}
                             </h3>
-                            <p className="text-white/70 text-sm truncate" title={song.artist}>
+                            <p className="text-white/70 text-xs truncate" title={song.artist}>
                                 {song.artist}
-                            </p>
-                            <p className="text-white/50 text-xs mt-2">
-                                {parseInt(song.playcount).toLocaleString()} plays
                             </p>
                         </div>
                     ))}
