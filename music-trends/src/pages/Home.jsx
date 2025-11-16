@@ -144,6 +144,14 @@ function Home() {
                 </div>
             </header>
 
+            {/* Banner - Top 50 Charts */}
+            <div className="charts-banner">
+                <div className="banner-content">
+                    <span className="banner-text">Top 50 Charts:</span>
+                    <span className="banner-country">{country ? country.charAt(0).toUpperCase() + country.slice(1) : 'Global'}</span>
+                </div>
+            </div>
+
             {/* Main Content */}
             <div className="main-content">
 
